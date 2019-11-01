@@ -36,7 +36,8 @@ RUN mkdir -p                                ${CROWD_INSTALL_DIR} ${CROWD_HOME} &
     chown -R 1001:0                      ${CROWD_INSTALL_DIR} ${CROWD_HOME} && \
     chmod -R g=u                         ${CROWD_INSTALL_DIR} ${CROWD_HOME} && \
     chown -R 1001:0                      /entrypoint.sh && \
-    chmod -R g=u                         /entrypoint.sh
+    chmod -R g=u                         /entrypoint.sh && \
+    rm -f /tmp/*.*
 USER 1001
 CMD ["bash", "-c", "$CROWD_INSTALL_DIR/start_crowd.sh -fg"]
 ENTRYPOINT ["/entrypoint.sh"]
