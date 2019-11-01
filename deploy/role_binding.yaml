@@ -1,0 +1,11 @@
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: crowd-operator
+subjects:
+- kind: ServiceAccount
+  name: crowd-operator
+roleRef:
+  kind: Role
+  name: crowd-operator
+  apiGroup: rbac.authorization.k8s.io
