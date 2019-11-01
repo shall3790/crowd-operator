@@ -27,17 +27,16 @@ RUN yum install -y java-1.8.0-openjdk java-1.8.0-openjdk-devel nss_wrapper && \
     rm -fr /var/cache/yum
 COPY entrypoint.sh                          /entrypoint.sh
 COPY crowd-init.properties /tmp/
+COPY atlassian-crowd-3.7.0.tar.gz /tmp/
 # ARG DOWNLOAD_URL=${INSTALL_SRC}/atlassian/crowd/atlassian-crowd-${CROWD_VERSION}.tar.gz
 
-#RUN mkdir -p                                ${CROWD_INSTALL_DIR} ${CROWD_HOME} && \
-#    curl -Lk --silent ${DOWNLOAD_URL} | tar -xz --strip-components=1 -C "${CROWD_INSTALL_DIR}" && \
-#    cp /tmp/crowd-init.properties ${CROWD_INSTALL_DIR}/crowd-webapp/WEB-INF/classes/ && \
-#    chown -R 1001:0                      ${CROWD_INSTALL_DIR} ${CROWD_HOME} && \
-#    chmod -R g=u                         ${CROWD_INSTALL_DIR} ${CROWD_HOME} && \
-#    chown -R 1001:0                      /entrypoint.sh && \
-#    chmod -R g=u                         /entrypoint.sh && \
-#    curl "https://iamcdcpvap110.amc.faa.gov/certsrv/certnew.cer?ReqID=CACert&Renewal=0&Mode=inst&Enc=b64" -o FAA-INTERNAL-CA.cer && \
-#    keytool -import -alias faa.internal -keystore $JAVA_HOME/jre/lib/security/cacerts -storepass changeit -noprompt -file FAA-INTERNAL-CA.cer
+RUN mkdir -p                                ${CROWD_INSTALL_DIR} ${CROWD_HOME} && \
+    tar -xzf /tmp/atlassian-crowd-3.7.0.tar.gz --strip-components=1 -C "${CROWD_INSTALL_DIR}" && \
+    cp /tmp/crowd-init.properties ${CROWD_INSTALL_DIR}/crowd-webapp/WEB-INF/classes/ && \
+    chown -R 1001:0                      ${CROWD_INSTALL_DIR} ${CROWD_HOME} && \
+    chmod -R g=u                         ${CROWD_INSTALL_DIR} ${CROWD_HOME} && \
+    chown -R 1001:0                      /entrypoint.sh && \
+    chmod -R g=u                         /entrypoint.sh
 USER 1001
 CMD ["bash", "-c", "$CROWD_INSTALL_DIR/start_crowd.sh -fg"]
 ENTRYPOINT ["/entrypoint.sh"]
